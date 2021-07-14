@@ -1,6 +1,6 @@
 # Plan
 - [ ]  Fetch info from GitHub API
-    - [ ]  GET issues
+    - [X]  GET issues
     - [ ]  Filter
         - [ ]  tags = good-first-issue, help-wanted, etc
         - [ ]  Custom filtering on descriptions including "YOUR_TEXT_HERE"
