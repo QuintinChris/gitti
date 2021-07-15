@@ -61,7 +61,7 @@ var getIssuesFromGithub = function (url, query) { return __awaiter(void 0, void 
         }
     });
 }); };
-var createQueryParams = function (option) {
+var getLabelQuery = function (option) {
     var query = '';
     switch (option) {
         case 'GFI':
@@ -81,7 +81,7 @@ var createQueryParams = function (option) {
     }
     return query;
 };
-var getLanguageQueryParams = function (toInclude, toExclude) {
+var getLanguageQuery = function (toInclude, toExclude) {
     var includedLanguages = '';
     var excludedLanguages = '';
     for (var i = 0; i < toInclude.length; i++) {
@@ -92,10 +92,17 @@ var getLanguageQueryParams = function (toInclude, toExclude) {
     }
     return { includedLanguages: includedLanguages, excludedLanguages: excludedLanguages };
 };
-var includeTest = ['js', 'ts'];
-var excludeTest = ['python', 'c'];
-console.log(getLanguageQueryParams(includeTest, excludeTest));
-// console.log(getIssuesFromGithub(SearchIssuesGithubApiUrl, createQueryParams('HW')))
+var KeywordLocation;
+(function (KeywordLocation) {
+    KeywordLocation[KeywordLocation["body"] = 0] = "body";
+    KeywordLocation[KeywordLocation["title"] = 1] = "title";
+    KeywordLocation[KeywordLocation["comments"] = 2] = "comments";
+})(KeywordLocation || (KeywordLocation = {}));
+var getKeywordQuery = function (keyword, location) {
+    var keywordQuery = keyword + " in:" + KeywordLocation[location];
+    return keywordQuery;
+};
+console.log(getKeywordQuery('Tests', 0));
 module.exports = getIssuesFromGithub;
 /*
 --SORTING OPTIONS--

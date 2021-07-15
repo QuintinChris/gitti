@@ -20,7 +20,7 @@ const getIssuesFromGithub = async (url: string, query: string) => {
     return result.data;
 }
 
-const createQueryParams = (option: string) => {
+const getLabelQuery = (option: string) => {
     let query: string = ''
     switch (option) {
         case 'GFI':
@@ -41,7 +41,7 @@ const createQueryParams = (option: string) => {
     return query;
 }
 
-const getLanguageQueryParams = (toInclude: string[], toExclude: string[]) => {
+const getLanguageQuery = (toInclude: string[], toExclude: string[]) => {
     let includedLanguages: string = ''
     let excludedLanguages: string = ''
     for (let i = 0; i < toInclude.length; i++) {
@@ -51,6 +51,17 @@ const getLanguageQueryParams = (toInclude: string[], toExclude: string[]) => {
         excludedLanguages += `-language:${toExclude[i]} `
     }
     return { includedLanguages, excludedLanguages }
+}
+
+enum KeywordLocation {
+    body = 0,
+    title = 1,
+    comments = 2
+}
+
+const getKeywordQuery = (keyword: string, location: KeywordLocation) => {
+    let keywordQuery: string = `${keyword} in:${KeywordLocation[location]}`
+    return keywordQuery
 }
 
 module.exports = getIssuesFromGithub;
@@ -79,7 +90,7 @@ FILTER OUT ISSUES THAT HAVE SOMETHING => -LABEL:RESOLVED, -STATE:CLOSED, ETC
 
 IDEA IS TO LET USER CONTROL/CHOOSE WHAT THEY WANT TO FILTER BY
 SO ON THE FRONT END, WE WILL HAVE A FORM WITH BUTTONS/TEXTBOXES TO LET USERS TELL WHAT ISSUES THEY WANT TO SEE
-I.E. 
+I.E.
     LABELS => BUTTONS FOR EACH LABEL, THEY CAN CHOOSE MORE THAN 1
     KEYWORDS => TEXTBOX, THEY ENTER TEXT THEY WANT TO SEE CONTAINED WITHIN (TITLE, BODY, OR COMMENTS? BUTTONS FOR THOSE?)
 */
