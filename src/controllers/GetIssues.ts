@@ -2,12 +2,18 @@ import axios, { AxiosResponse } from 'axios'
 const GithubApiUrl = 'https://api.github.com/'
 const SearchIssuesGithubApiUrl = 'https://api.github.com/search/issues'
 
-enum Labels {
+enum DefaultLabels {
     'good first issue',
     'help wanted',
     'enhancement',
     'priority',
-    'first timers only'
+    'first timers only',
+    'documentation',
+    'bug',
+    'invalid',
+    'question',
+    'wontfix',
+    'duplicate'
 }
 
 enum KeywordLocation {
@@ -33,10 +39,13 @@ const getIssuesFromGithub = async (url: string, query: string) => {
     return result.data;
 }
 
-const getLabelsQuery = (options: Labels[]) => {
+const getLabelsQuery = (options: DefaultLabels[], customOption: string) => {
     let labelsQuery: string = '';
     for (let i = 0; i < options.length; i++) {
-        labelsQuery += `label:${Labels[options[i]]} `
+        labelsQuery += `label:${DefaultLabels[options[i]]} `
+    }
+    if (customOption) {
+        labelsQuery += `label:${customOption}`
     }
     return labelsQuery;
 }
@@ -58,6 +67,8 @@ const getLanguageQuery = (toInclude: string[], toExclude: string[]) => {
     return { includedLanguages, excludedLanguages }
 }
 
+const getExcludedItems = (items: string[]) => {}
+
 module.exports = getIssuesFromGithub;
 
 
@@ -66,10 +77,10 @@ module.exports = getIssuesFromGithub;
 1. SORT BY LAST UPDATED
 
 --FILTER OUT BEFORE SHOWING USER--
-1. LABELS CONTAINS X
-2. ASSIGNEE OR ASIGNEES ARE BOTH EMPTY
-3. LOCKED = FALSE
-4. STATE = 'OPEN'
+1. -linked:pr
+2. no:assignee
+3. is:open / state:open
+
 
 --FILTERING OPTIONS--
 SO YOU CAN QUERY GITHUB API KINDA LIKE JQL FOR JIRA,
@@ -77,8 +88,7 @@ SO YOU CAN QUERY GITHUB API KINDA LIKE JQL FOR JIRA,
 ✔ FILTER FOR TERMS IN BODY OF ISSUE => TESTS IN:BODY 
 ✔ FILTER BY PRIORITY LABELS => LABEL:PRIORITY
 SEARCH THINGS THAT HAVE NO SOMETHING => NO:ASSIGNEE, NO:LABEL
-SEARCH WORDS IN THE TITLE, BODY, OR COMMENTS => WORDS IN:TITLE/BODY/COMMENTS
-SEARCH OPEN/CLOSED => IS:OPEN OR STATE:OPEN
+✔ SEARCH WORDS IN THE TITLE, BODY, OR COMMENTS => WORDS IN:TITLE/BODY/COMMENTS
 FILTER OUT ISSUES LINKED TO A PR => -LINKED:PR
 FILTER OUT ISSUES THAT HAVE SOMETHING => -LABEL:RESOLVED, -STATE:CLOSED, ETC
 
