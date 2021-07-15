@@ -90,6 +90,9 @@ const constructQuery = (labelsQuery: string, languageQuery: string, keywordQuery
 
 const constructQueryAndCallAPI = () => {
     // Do stuff here, get final query, call API with that query + generalQueryFilter
+    // const results = getIssuesFromGithub()
+    // const sorted = sortQueryResults(results)
+    // return sorted
 }
 
 const sortQueryResults = (data: Object) => {
