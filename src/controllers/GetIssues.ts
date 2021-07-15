@@ -2,6 +2,19 @@ import axios, { AxiosResponse } from 'axios'
 const GithubApiUrl = 'https://api.github.com/'
 const SearchIssuesGithubApiUrl = 'https://api.github.com/search/issues'
 
+enum Labels {
+    'good first issue',
+    'help wanted',
+    'enhancement',
+    'priority',
+    'first timers only'
+}
+
+enum KeywordLocation {
+    body = 0,
+    title = 1,
+    comments = 2
+}
 
 const getIssuesFromGithub = async (url: string, query: string) => {
     let result: AxiosResponse = await axios
@@ -20,25 +33,17 @@ const getIssuesFromGithub = async (url: string, query: string) => {
     return result.data;
 }
 
-const getLabelQuery = (option: string) => {
-    let query: string = ''
-    switch (option) {
-        case 'GFI':
-            query = 'good first issue'
-            break;
-        case 'FTO':
-            query = 'first-timers-only'
-            break;
-        case 'ENH':
-            query = 'enhancement'
-            break;
-        case 'HW':
-            query = 'help wanted'
-            break;
-        default:
-            break;
+const getLabelsQuery = (options: Labels[]) => {
+    let labelsQuery: string = '';
+    for (let i = 0; i < options.length; i++) {
+        labelsQuery += `label:${Labels[options[i]]} `
     }
-    return query;
+    return labelsQuery;
+}
+
+const getKeywordQuery = (keyword: string, location: KeywordLocation) => {
+    let keywordQuery: string = `${keyword} in:${KeywordLocation[location]}`
+    return keywordQuery
 }
 
 const getLanguageQuery = (toInclude: string[], toExclude: string[]) => {
@@ -51,17 +56,6 @@ const getLanguageQuery = (toInclude: string[], toExclude: string[]) => {
         excludedLanguages += `-language:${toExclude[i]} `
     }
     return { includedLanguages, excludedLanguages }
-}
-
-enum KeywordLocation {
-    body = 0,
-    title = 1,
-    comments = 2
-}
-
-const getKeywordQuery = (keyword: string, location: KeywordLocation) => {
-    let keywordQuery: string = `${keyword} in:${KeywordLocation[location]}`
-    return keywordQuery
 }
 
 module.exports = getIssuesFromGithub;
@@ -79,9 +73,9 @@ module.exports = getIssuesFromGithub;
 
 --FILTERING OPTIONS--
 SO YOU CAN QUERY GITHUB API KINDA LIKE JQL FOR JIRA,
-FILTER BY LANGUAGE => LANGUAGE:TS/JS/RUBY/ETC,
-FILTER FOR TERMS IN BODY OF ISSUE => TESTS IN:BODY
-FILTER BY PRIORITY LABELS => LABEL:PRIORITY
+✔ FILTER BY LANGUAGE => LANGUAGE:TS/JS/RUBY/ETC, 
+✔ FILTER FOR TERMS IN BODY OF ISSUE => TESTS IN:BODY 
+✔ FILTER BY PRIORITY LABELS => LABEL:PRIORITY
 SEARCH THINGS THAT HAVE NO SOMETHING => NO:ASSIGNEE, NO:LABEL
 SEARCH WORDS IN THE TITLE, BODY, OR COMMENTS => WORDS IN:TITLE/BODY/COMMENTS
 SEARCH OPEN/CLOSED => IS:OPEN OR STATE:OPEN

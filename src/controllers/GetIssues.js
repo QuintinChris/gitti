@@ -61,26 +61,23 @@ var getIssuesFromGithub = function (url, query) { return __awaiter(void 0, void 
         }
     });
 }); };
-var getLabelQuery = function (option) {
-    var query = '';
-    switch (option) {
-        case 'GFI':
-            query = 'good first issue';
-            break;
-        case 'FTO':
-            query = 'first-timers-only';
-            break;
-        case 'ENH':
-            query = 'enhancement';
-            break;
-        case 'HW':
-            query = 'help wanted';
-            break;
-        default:
-            break;
+var Labels;
+(function (Labels) {
+    Labels[Labels["good first issue"] = 0] = "good first issue";
+    Labels[Labels["help wanted"] = 1] = "help wanted";
+    Labels[Labels["enhancement"] = 2] = "enhancement";
+    Labels[Labels["priority"] = 3] = "priority";
+    Labels[Labels["first timers only"] = 4] = "first timers only";
+})(Labels || (Labels = {}));
+var getLabelsQuery = function (options) {
+    var labelsQuery = '';
+    for (var i = 0; i < options.length; i++) {
+        labelsQuery += "label:" + Labels[options[i]];
     }
-    return query;
+    return labelsQuery;
 };
+var test = [1, 3];
+console.log(getLabelsQuery(test));
 var getLanguageQuery = function (toInclude, toExclude) {
     var includedLanguages = '';
     var excludedLanguages = '';
@@ -102,7 +99,7 @@ var getKeywordQuery = function (keyword, location) {
     var keywordQuery = keyword + " in:" + KeywordLocation[location];
     return keywordQuery;
 };
-console.log(getKeywordQuery('Tests', 0));
+var getExcludedItems = function (items) { };
 module.exports = getIssuesFromGithub;
 /*
 --SORTING OPTIONS--
@@ -116,8 +113,8 @@ module.exports = getIssuesFromGithub;
 
 --FILTERING OPTIONS--
 SO YOU CAN QUERY GITHUB API KINDA LIKE JQL FOR JIRA,
-FILTER BY LANGUAGE => LANGUAGE:TS/JS/RUBY/ETC,
-FILTER FOR TERMS IN BODY OF ISSUE => TESTS IN:BODY
+✔ FILTER BY LANGUAGE => LANGUAGE:TS/JS/RUBY/ETC,
+✔ FILTER FOR TERMS IN BODY OF ISSUE => TESTS IN:BODY
 FILTER BY PRIORITY LABELS => LABEL:PRIORITY
 SEARCH THINGS THAT HAVE NO SOMETHING => NO:ASSIGNEE, NO:LABEL
 SEARCH WORDS IN THE TITLE, BODY, OR COMMENTS => WORDS IN:TITLE/BODY/COMMENTS
