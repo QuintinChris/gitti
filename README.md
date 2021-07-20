@@ -47,24 +47,25 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 # Plan
-- [ ]  Fetch info from GitHub API
+- [X]  Fetch info from GitHub API
     - [X]  GET issues
-    - [ ]  Filter
-        - [ ]  tags = good-first-issue, help-wanted, etc
-        - [ ]  Custom filtering on descriptions including "YOUR_TEXT_HERE"
+    - [X]  Filter
+        - [X]  tags = good-first-issue, help-wanted, etc
+        - [X]  Custom filtering on descriptions including "YOUR_TEXT_HERE"
+- [ ] Start UI
+  - [X] Added Bootstrap... for info -> https://react-bootstrap.github.io/getting-started/introduction/
+  - [ ] make basic cards that can display results from API
 - [ ]  Configure refreshing API calls
-    - [ ]  i.e. make sure the results update as soon as a new issue is created/tagged
-    - [ ]  how do we make a continuous API call? or a call the updates once the results change?
+    - [ ]  Assign API call to componentDidMount? see here: https://stackoverflow.com/questions/47386382/detect-if-we-gets-new-response-from-api
+- [ ] Set up DB Connection & Models
 - [ ] Configure user profiles
     - [ ] users will need profiles, so they can see updates for more than 1 query. we can save these to their profile.
-- [ ]  Configure email notifications
-- [ ]  Configure UI
-    - [ ]  use react with ts
+- [ ]  Configure login & user profile UI
     - [ ]  simple register/login form kinda thing, users can choose what kind of issues they want to receive notifications on, enter their email, they're preferences are saved
-        - [ ]  Note: we will need to set up a DB for this
-    - [ ]  make a simple front-end that would display the issues for users to sift through, simple issue cards, scrollable
+- [ ]  Configure email notifications
+- [ ]  Finish UI
 - [ ]  Configure SMS notifications (using Twilio API)
 - [ ]  Configure Stripe billing for premium version
-- [ ]  Host online
+- [ ]  Deploy & Host
     - [ ]  AWS S3? Lambda? Definitely will need to research this
 - [ ]  Done! 🎉 
