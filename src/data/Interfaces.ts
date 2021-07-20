@@ -7,7 +7,19 @@ interface Issue {
 }
 
 interface IssueProps {
-    issue: Issue
+    issues: Issue[]
 }
 
-export type {Issue, IssueProps}
+interface ApiClient {
+    constructQueryAndCallAPI(): void
+}
+
+type AppState = {
+    apiClient: ApiClient
+}
+interface AppProps extends IssueProps {
+    // status: 'Loading' | 'Failure' | 'Success'
+    status: string
+}
+
+export type {Issue, IssueProps, AppState, AppProps}

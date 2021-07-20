@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from "react-bootstrap/Card";
-import {Issue, IssueProps} from '../data/Interfaces'
+import {IssueProps} from '../data/Interfaces'
 
 class IssueCard extends React.Component<IssueProps> {
     render() {
