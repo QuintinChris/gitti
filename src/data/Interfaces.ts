@@ -11,15 +11,16 @@ interface IssueProps {
 }
 
 interface ApiClient {
-    constructQueryAndCallAPI(): void
+    constructQueryAndCallAPI(): Issue[]
 }
 
 type AppState = {
-    apiClient: ApiClient
+    issues: Issue[],
+    apiClient: ApiClient,
+    status: 'Loading' | 'Failure' | 'Success'
 }
 interface AppProps extends IssueProps {
-    // status: 'Loading' | 'Failure' | 'Success'
-    status: string
+    
 }
 
 export type {Issue, IssueProps, AppState, AppProps}

@@ -5,15 +5,29 @@ import Toast from 'react-bootstrap/Toast'
 import IssueCard from './IssueCard'
 import { Issue, IssueProps, AppState, AppProps } from '../data/Interfaces'
 import ApiClient from '../api/ApiClient'
+import * as _ from "lodash"
 
 class Issues extends React.Component<AppProps, AppState> {
     state: AppState = {
-        apiClient: new ApiClient()
+        issues: [],
+        apiClient: new ApiClient(),
+        status: 'Loading'
     }
 
     GetIssues = async (): Promise<void> => {
         const issues: Issue[] = this.state.apiClient.constructQueryAndCallAPI()
-        issues ? this.props.issues = issues : this.props.status = 'Failure'
+        _.isEmpty(issues) ? this.UpdateIssuesAndStatus('Failure') : this.UpdateIssuesAndStatus('Success', issues)
+    }
+
+    UpdateIssuesAndStatus = (status: string, issues?: Issue[]) => {
+        if (status === 'Success') {
+            this.state.issues = issues!
+            this.state.status = 'Success'
+        }
+        else if (status === 'Failure') {
+            this.state.status = 'Failure'
+            // this.state.message = 'An error occured fetching data from API'
+        }
     }
 
     render() {

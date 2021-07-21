@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 const GithubApiUrl = 'https://api.github.com/'
 const SearchIssuesGithubApiUrl = 'https://api.github.com/search/issues'
 const generalQueryFilter = '-linked:pr no:assignee state:open'
+import { Issue } from '../data/Interfaces'
 
 enum DefaultLabels {
     'good first issue',
@@ -87,7 +88,7 @@ class ApiClient {
 
     constructQuery = (labelsQuery: string, languageQuery: string, keywordQuery: string, excludedItems: string) => {
         const query: string = `${labelsQuery} ${languageQuery} ${keywordQuery} ${excludedItems}`;
-        return query
+        return query;
     }
 
     constructQueryAndCallAPI = () => {
@@ -95,6 +96,8 @@ class ApiClient {
         // const results = getIssuesFromGithub()
         // const sorted = sortQueryResults(results)
         // return sorted
+        let issues: Issue[] = [];
+        return issues;
     }
 
     sortQueryResults = (data: Object) => {
@@ -103,10 +106,10 @@ class ApiClient {
         // give user sorting options?
     }
 
-    sendGetRequest = async(path: string): Promise<Object> => {
-		const response: AxiosResponse<Object> = await axios.get<Object>(`http://${GithubApiUrl}/${path}`);
-		return Promise.resolve(response.data);
-	}
+    sendGetRequest = async (path: string): Promise<Object> => {
+        const response: AxiosResponse<Object> = await axios.get<Object>(`http://${GithubApiUrl}/${path}`);
+        return Promise.resolve(response.data);
+    }
 }
 
 export default ApiClient;
