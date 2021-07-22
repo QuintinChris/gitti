@@ -7,7 +7,7 @@ interface Issue {
 }
 
 interface IssueProps {
-    issues: Issue[]
+    issue: Issue
 }
 
 interface ApiClient {

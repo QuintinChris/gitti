@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Toast from 'react-bootstrap/Toast'
 import IssueCard from './IssueCard'
-import { Issue, IssueProps, AppState, AppProps } from '../data/Interfaces'
+import { Issue, AppState, AppProps } from '../data/Interfaces'
 import ApiClient from '../api/ApiClient'
 import _ from "lodash";
 
@@ -30,16 +30,19 @@ class Issues extends React.Component<AppProps, AppState> {
         }
     }
 
+    componentDidMount = () => {
+        this.GetIssues();
+    }
+
     render() {
         return (
-            // map issues here
             <Toast>
                 <Toast.Body>
                     {
-                        this.props.issues ?
-                            this.props.issues.map((issue: Issue) => {
+                        this.state.issues ?
+                            this.state.issues.map((issue: Issue) => {
                                 return <IssueCard
-                                    issues={issues}
+                                    issue={issue}
                                 />;
                             }) : ``
                     }
