@@ -5,7 +5,7 @@ import Toast from 'react-bootstrap/Toast'
 import IssueCard from './IssueCard'
 import { Issue, IssueProps, AppState, AppProps } from '../data/Interfaces'
 import ApiClient from '../api/ApiClient'
-import * as _ from "lodash"
+import _ from "lodash";
 
 class Issues extends React.Component<AppProps, AppState> {
     state: AppState = {
@@ -21,12 +21,12 @@ class Issues extends React.Component<AppProps, AppState> {
 
     UpdateIssuesAndStatus = (status: string, issues?: Issue[]) => {
         if (status === 'Success') {
-            this.state.issues = issues!
-            this.state.status = 'Success'
+            this.setState({ issues: issues! })
+            this.setState({ status: 'Success' })
         }
         else if (status === 'Failure') {
-            this.state.status = 'Failure'
-            // this.state.message = 'An error occured fetching data from API'
+            this.setState({ status: 'Failure' })
+            // this.setState({message: 'An error occured fetching data from API' })
         }
     }
 
