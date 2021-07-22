@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Toast from 'react-bootstrap/Toast'
 import IssueCard from './IssueCard'
-import { Issue, AppState, AppProps } from '../data/Interfaces'
+import { Issue, AppState, AppProps, DefaultLabels, KeywordLocation, Query } from '../data/Interfaces'
 import ApiClient from '../api/ApiClient'
 import _ from "lodash";
 
@@ -14,8 +14,21 @@ class Issues extends React.Component<AppProps, AppState> {
         status: 'Loading'
     }
 
+    MockQuery = () => {
+        const bugLabel: DefaultLabels = 'bug' as DefaultLabels
+        const enhancementLabel: DefaultLabels = 'enhancement' as DefaultLabels
+        let query: Query = {
+            languageQuery: this.state.apiClient.getLanguageQuery(['typescript', 'js'], ['c']),
+            labelsQuery: this.state.apiClient.getLabelsQuery([bugLabel, enhancementLabel]),
+            keywordQuery: this.state.apiClient.getKeywordQuery('', ('body' as KeywordLocation)),
+            excludedItems: this.state.apiClient.getExcludedItems([''])
+        }
+        return query
+    }
+
     GetIssues = async (): Promise<void> => {
-        const issues: Issue[] = this.state.apiClient.constructQueryAndCallAPI()
+        const query: Query = this.MockQuery()
+        const issues: Issue[] = this.state.apiClient.constructQueryAndCallAPI(query)
         _.isEmpty(issues) ? this.UpdateIssuesAndStatus('Failure') : this.UpdateIssuesAndStatus('Success', issues)
     }
 

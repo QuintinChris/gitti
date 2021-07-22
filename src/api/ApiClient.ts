@@ -1,37 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
+import _ from 'lodash'
+import { Issue, DefaultLabels, KeywordLocation, Query } from '../data/Interfaces'
 const GithubApiUrl = 'https://api.github.com/'
 const SearchIssuesGithubApiUrl = 'https://api.github.com/search/issues'
 const generalQueryFilter = '-linked:pr no:assignee state:open'
-import { Issue } from '../data/Interfaces'
-
-enum DefaultLabels {
-    'good first issue',
-    'help wanted',
-    'enhancement',
-    'priority',
-    'first timers only',
-    'documentation',
-    'bug',
-    'invalid',
-    'question',
-    'wontfix',
-    'duplicate'
-}
-
-enum KeywordLocation {
-    body = 0,
-    title = 1,
-    comments = 2
-}
-
-type Query = {
-    languageQuery: string,
-    labelsQuery: string,
-    keywordQuery: string,
-    excludedItems: string
-}
-
 class ApiClient {
+    // TODO: handle null params in all the getQuery methods
 
     getIssuesFromGithub = async (url: string, query: string) => {
         let result: AxiosResponse = await axios
@@ -50,10 +24,10 @@ class ApiClient {
         return result.data;
     }
 
-    getLabelsQuery = (options: DefaultLabels[], customOption: string) => {
+    getLabelsQuery = (options: DefaultLabels[], customOption?: string) => {
         let labelsQuery: string = '';
         for (let i = 0; i < options.length; i++) {
-            labelsQuery += `label:${DefaultLabels[options[i]]} `
+            labelsQuery += `label:${options[i]} `
         }
         if (customOption) {
             labelsQuery += `label:${customOption}`
@@ -62,11 +36,13 @@ class ApiClient {
     }
 
     getKeywordQuery = (keyword: string, location: KeywordLocation) => {
-        let keywordQuery: string = `${keyword} in:${KeywordLocation[location]}`
+        // what if keyword or location is null?
+        let keywordQuery: string = `${keyword} in:${location}`
         return keywordQuery
     }
 
     getLanguageQuery = (toInclude: string[], toExclude: string[]) => {
+        // what if either of args is null?
         let includedLanguages: string = ''
         let excludedLanguages: string = ''
         for (let i = 0; i < toInclude.length; i++) {
@@ -75,7 +51,7 @@ class ApiClient {
         for (let i = 0; i < toExclude.length; i++) {
             excludedLanguages += `-language:${toExclude[i]} `
         }
-        return { includedLanguages, excludedLanguages }
+        return includedLanguages.concat(excludedLanguages);
     }
 
     getExcludedItems = (items: string[]) => {
@@ -86,18 +62,17 @@ class ApiClient {
         return excludedItemsQuery
     }
 
-    constructQuery = (labelsQuery: string, languageQuery: string, keywordQuery: string, excludedItems: string) => {
-        const query: string = `${labelsQuery} ${languageQuery} ${keywordQuery} ${excludedItems}`;
-        return query;
+    constructQueryAndCallAPI = (query: Query) => {
+        const theQuery: string = `${query.labelsQuery} ${query.languageQuery} ${query.keywordQuery} ${query.excludedItems} ${generalQueryFilter}`
+        let result = this.getIssuesFromGithub(SearchIssuesGithubApiUrl, theQuery);
+        let issues: Issue[] = this.formatQueryResults(result)
+        return issues;
     }
 
-    constructQueryAndCallAPI = () => {
-        // Do stuff here, get final query, call API with that query + generalQueryFilter
-        // const results = getIssuesFromGithub()
-        // const sorted = sortQueryResults(results)
-        // return sorted
+    formatQueryResults = (data: Object) => {
         let issues: Issue[] = [];
-        return issues;
+        issues = _.assign(data, issues)
+        return issues
     }
 
     sortQueryResults = (data: Object) => {
@@ -107,7 +82,7 @@ class ApiClient {
     }
 
     sendGetRequest = async (path: string): Promise<Object> => {
-        const response: AxiosResponse<Object> = await axios.get<Object>(`http://${GithubApiUrl}/${path}`);
+        const response: AxiosResponse<Object> = await axios.get<Object>(`http://${GithubApiUrl}/${path}`)
         return Promise.resolve(response.data);
     }
 }
