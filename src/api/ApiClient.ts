@@ -8,20 +8,22 @@ class ApiClient {
     // TODO: handle null params in all the getQuery methods
 
     getIssuesFromGithub = async (url: string, query: string) => {
-        let result: AxiosResponse = await axios
+        let data
+        let request: AxiosResponse = await axios
             .get(url, {
                 params: {
-                    q: `"${query}"`
+                    q: query
                 }
             })
             .then((response) => {
-                console.log(response.data);
+                data = response.data
                 return response.data;
             })
             .catch((error) => {
                 console.log(error);
             });
-        return result.data;
+
+        return data
     }
 
     getLabelsQuery = (options: DefaultLabels[], customOption?: string) => {
@@ -62,17 +64,36 @@ class ApiClient {
         return excludedItemsQuery
     }
 
-    constructQueryAndCallAPI = (query: Query) => {
-        const theQuery: string = `${query.labelsQuery} ${query.languageQuery} ${query.keywordQuery} ${query.excludedItems} ${generalQueryFilter}`
-        let result = this.getIssuesFromGithub(SearchIssuesGithubApiUrl, theQuery);
+    constructQueryAndCallAPI = async (query: Query) => {
+        const theQuery: string = `${query.labelsQuery ? query.labelsQuery : ''} ${query.languageQuery ? query.languageQuery : ''} ${query.keywordQuery ? query.keywordQuery : ''} ${query.excludedItems? query.excludedItems : ''} ${generalQueryFilter}`
+        let result = await this.getIssuesFromGithub(SearchIssuesGithubApiUrl, theQuery);
         let issues: Issue[] = this.formatQueryResults(result)
         return issues;
     }
 
-    formatQueryResults = (data: Object) => {
+    formatQueryResults = (data: any) => {
         let issues: Issue[] = [];
-        issues = _.assign(data, issues)
+        data.items.forEach((item: any) => {
+            issues.push(this.toIssue(item));
+        });
+        console.log(issues);
         return issues
+    }
+
+    toIssue = (obj: any) => {
+        let newIssue: Issue = {
+            name: obj.title ?? '',
+            labels: obj.labels ?? [],
+            description: obj.body ?? '',
+            repo: obj.url ?? '',
+            assignees: obj.assignees,
+            comments: obj.comments,
+            link: obj.url,
+            state: obj.state,
+            createdAt: obj.created_at,
+            lastUpdated: obj.updated_at
+        }
+        return newIssue
     }
 
     sortQueryResults = (data: Object) => {

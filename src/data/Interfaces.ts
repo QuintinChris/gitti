@@ -1,9 +1,14 @@
 interface Issue {
     name: string,
-    title: string,
-    labels?: string[],
+    labels?: string[] | string,
     description: string,
     repo: string,
+    assignees: string | string[],
+    comments: string,
+    link: string,
+    state: string,
+    createdAt: Date,
+    lastUpdated: Date
 }
 
 interface IssueProps {
@@ -20,7 +25,7 @@ interface AppProps extends IssueProps {
 }
 
 interface ApiClient {
-    constructQueryAndCallAPI(query: Query): Issue[],
+    constructQueryAndCallAPI(query: Query): Promise<Issue[]>,
     getLabelsQuery(options: DefaultLabels[], customOption?: string): string,
     getKeywordQuery(keyword: string, location: KeywordLocation): string,
     getLanguageQuery(toInclude: string[], toExclude: string[]): string,
