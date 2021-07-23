@@ -54,15 +54,15 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
         - [X]  Custom filtering on descriptions including "YOUR_TEXT_HERE"
 - [ ] Start UI
   - [X] Added Bootstrap... for info -> https://react-bootstrap.github.io/getting-started/introduction/
-  - [ ] make basic cards that can display results from API
+  - [X] make basic cards that can display results from API
 - [ ]  Configure refreshing API calls
     - [ ]  Assign API call to componentDidMount? see here: https://stackoverflow.com/questions/47386382/detect-if-we-gets-new-response-from-api
+- [ ]  Configure email notifications
 - [ ] Set up DB Connection & Models
 - [ ] Configure user profiles
     - [ ] users will need profiles, so they can see updates for more than 1 query. we can save these to their profile.
 - [ ]  Configure login & user profile UI
     - [ ]  simple register/login form kinda thing, users can choose what kind of issues they want to receive notifications on, enter their email, they're preferences are saved
-- [ ]  Configure email notifications
 - [ ]  Finish UI
 - [ ]  Configure SMS notifications (using Twilio API)
 - [ ]  Configure Stripe billing for premium version

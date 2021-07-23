@@ -27,14 +27,13 @@ class Issues extends React.Component {
     GetIssues = async (): Promise<void> => {
         const query: Query = this.MockQuery()
         const issues: Promise<Issue[]> = this.state.apiClient.constructQueryAndCallAPI(query)
-        _.isEmpty(issues) ? this.UpdateIssuesAndStatus('Failure') : this.UpdateIssuesAndStatus('Success', await issues)
+        _.isEmpty(await issues) ? this.UpdateIssuesAndStatus('Failure') : this.UpdateIssuesAndStatus('Success', await issues)
     }
 
     UpdateIssuesAndStatus = (status: string, issues?: Issue[]) => {
         if (status === 'Success') {
             this.setState({ issues: issues! })
             this.setState({ status: 'Success' })
-            console.log(this.state.status);
         }
         else if (status === 'Failure') {
             this.setState({ status: 'Failure' })
