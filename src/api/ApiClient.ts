@@ -76,7 +76,6 @@ class ApiClient {
         data.items.forEach((item: any) => {
             issues.push(this.toIssue(item));
         });
-        console.log(issues);
         return issues
     }
 

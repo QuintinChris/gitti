@@ -1,6 +1,6 @@
 interface Issue {
     name: string,
-    labels?: string[] | string,
+    labels?: string[],
     description: string,
     repo: string,
     assignees: string | string[],
