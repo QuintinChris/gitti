@@ -15,12 +15,13 @@ class Issues extends React.Component<AppProps, AppState> {
     }
 
     MockQuery = () => {
-        const bugLabel: DefaultLabels = 'bug' as DefaultLabels
-        const enhancementLabel: DefaultLabels = 'enhancement' as DefaultLabels
+        const bugLabel: DefaultLabels = 'bug'
+        const enhancementLabel: DefaultLabels = 'enhancement'
+        const location: KeywordLocation = 'body';
         let query: Query = {
             languageQuery: this.state.apiClient.getLanguageQuery(['typescript', 'js'], ['c']),
             labelsQuery: this.state.apiClient.getLabelsQuery([bugLabel, enhancementLabel]),
-            keywordQuery: this.state.apiClient.getKeywordQuery('', ('body' as KeywordLocation)),
+            keywordQuery: this.state.apiClient.getKeywordQuery('', location),
             excludedItems: this.state.apiClient.getExcludedItems([''])
         }
         return query

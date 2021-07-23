@@ -27,16 +27,20 @@ interface ApiClient {
     getExcludedItems(items: string[]): string
 }
 
-type DefaultLabels = {
-    label: 'good first issue' | 'help wanted' | 'enhancement' | 'priority' | 'first timers only' | 'documentation' | 'bug' | 'invalid' | 'question' | 'wontfix' | 'duplicate'
-}
+type DefaultLabels =
+    'good first issue' |
+    'help wanted' |
+    'enhancement' |
+    'priority' |
+    'first timers only' |
+    'documentation' |
+    'bug' |
+    'invalid' |
+    'question' |
+    'wontfix' |
+    'duplicate'
 
-type KeywordLocation = {
-    location: 'body' | 'title' | 'comments'
-    // body = 0,
-    // title = 1,
-    // comments = 2
-}
+type KeywordLocation = 'body' | 'title' | 'comments'
 
 type Query = {
     languageQuery?: string,
