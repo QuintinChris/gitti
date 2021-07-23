@@ -1,25 +1,57 @@
 interface Issue {
     name: string,
-    title: string,
-    labels?: string[],
+    labels?: string[] | string,
     description: string,
     repo: string,
+    assignees: string | string[],
+    comments: string,
+    link: string,
+    state: string,
+    createdAt: Date,
+    lastUpdated: Date
 }
 
 interface IssueProps {
-    issues: Issue[]
-}
-
-interface ApiClient {
-    constructQueryAndCallAPI(): void
+    issue: Issue
 }
 
 type AppState = {
-    apiClient: ApiClient
+    issues: Issue[],
+    apiClient: ApiClient,
+    status: 'Loading' | 'Failure' | 'Success'
 }
 interface AppProps extends IssueProps {
-    // status: 'Loading' | 'Failure' | 'Success'
-    status: string
+    
 }
 
-export type {Issue, IssueProps, AppState, AppProps}
+interface ApiClient {
+    constructQueryAndCallAPI(query: Query): Promise<Issue[]>,
+    getLabelsQuery(options: DefaultLabels[], customOption?: string): string,
+    getKeywordQuery(keyword: string, location: KeywordLocation): string,
+    getLanguageQuery(toInclude: string[], toExclude: string[]): string,
+    getExcludedItems(items: string[]): string
+}
+
+type DefaultLabels =
+    'good first issue' |
+    'help wanted' |
+    'enhancement' |
+    'priority' |
+    'first timers only' |
+    'documentation' |
+    'bug' |
+    'invalid' |
+    'question' |
+    'wontfix' |
+    'duplicate'
+
+type KeywordLocation = 'body' | 'title' | 'comments'
+
+type Query = {
+    languageQuery?: string,
+    labelsQuery?: string,
+    keywordQuery?: string,
+    excludedItems?: string
+}
+
+export type {Issue, IssueProps, AppState, AppProps, DefaultLabels, KeywordLocation, Query}

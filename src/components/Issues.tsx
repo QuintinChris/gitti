@@ -1,33 +1,62 @@
 import React from 'react';
-import './App.css';
+import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Toast from 'react-bootstrap/Toast'
 import IssueCard from './IssueCard'
-import { Issue, IssueProps, AppState, AppProps } from '../data/Interfaces'
+import { Issue, AppState, DefaultLabels, Query } from '../data/Interfaces'
 import ApiClient from '../api/ApiClient'
+import _ from "lodash";
 
-class Issues extends React.Component<AppProps, AppState> {
+class Issues extends React.Component {
     state: AppState = {
-        apiClient: new ApiClient()
+        issues: [],
+        apiClient: new ApiClient(),
+        status: 'Loading'
+    }
+
+    MockQuery = () => {
+        const bugLabel: DefaultLabels = 'bug'
+        const enhancementLabel: DefaultLabels = 'enhancement'
+        let query: Query = {
+            languageQuery: this.state.apiClient.getLanguageQuery(['typescript', 'js'], ['c']),
+            labelsQuery: this.state.apiClient.getLabelsQuery([bugLabel, enhancementLabel]),
+        }
+        return query
     }
 
     GetIssues = async (): Promise<void> => {
-        const issues: Issue[] = this.state.apiClient.constructQueryAndCallAPI()
-        issues ? this.props.issues = issues : this.props.status = 'Failure'
+        const query: Query = this.MockQuery()
+        const issues: Promise<Issue[]> = this.state.apiClient.constructQueryAndCallAPI(query)
+        _.isEmpty(issues) ? this.UpdateIssuesAndStatus('Failure') : this.UpdateIssuesAndStatus('Success', await issues)
+    }
+
+    UpdateIssuesAndStatus = (status: string, issues?: Issue[]) => {
+        if (status === 'Success') {
+            this.setState({ issues: issues! })
+            this.setState({ status: 'Success' })
+            console.log(this.state.status);
+        }
+        else if (status === 'Failure') {
+            this.setState({ status: 'Failure' })
+            // this.setState({message: 'An error occured fetching data from API' })
+        }
+    }
+
+    componentDidMount = () => {
+        this.GetIssues();
     }
 
     render() {
         return (
-            // map issues here
             <Toast>
                 <Toast.Body>
                     {
-                        this.props.issues ?
-                            this.props.issues.map((issue: Issue) => {
+                        this.state.issues ?
+                            this.state.issues.map((issue: Issue) => {
                                 return <IssueCard
-                                    issues={issues}
+                                    issue={issue}
                                 />;
-                            }) : ``
+                            }) : `There are no results`
                     }
                 </Toast.Body>
             </Toast>
