@@ -52,7 +52,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
     - [X]  Filter
         - [X]  tags = good-first-issue, help-wanted, etc
         - [X]  Custom filtering on descriptions including "YOUR_TEXT_HERE"
-- [ ] Start UI
+- [X] Start UI
   - [X] Added Bootstrap... for info -> https://react-bootstrap.github.io/getting-started/introduction/
   - [X] make basic cards that can display results from API
 - [ ]  Configure refreshing API calls

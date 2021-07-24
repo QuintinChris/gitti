@@ -81,6 +81,7 @@ class ApiClient {
 
     toIssue = (obj: any) => {
         let newIssue: Issue = {
+            id: obj.id ?? '',
             name: obj.title ?? '',
             labels: obj.labels ?? [],
             description: obj.body ?? '',
@@ -89,8 +90,8 @@ class ApiClient {
             comments: obj.comments,
             link: obj.url,
             state: obj.state,
-            createdAt: obj.created_at,
-            lastUpdated: obj.updated_at
+            createdAt: new Date(obj.created_at),
+            lastUpdated: new Date(obj.updated_at)
         }
         return newIssue
     }

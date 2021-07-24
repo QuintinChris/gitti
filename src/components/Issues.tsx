@@ -52,7 +52,7 @@ class Issues extends React.Component {
                     {
                         this.state.issues ?
                             this.state.issues.map((issue: Issue) => {
-                                return <IssueCard
+                                return <IssueCard key={issue.id}
                                     issue={issue}
                                 />;
                             }) : `There are no results`

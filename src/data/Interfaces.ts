@@ -1,6 +1,7 @@
 interface Issue {
+    id: string,
     name: string,
-    labels?: string[],
+    labels?: Label[],
     description: string,
     repo: string,
     assignees: string | string[],
@@ -11,7 +12,14 @@ interface Issue {
     lastUpdated: Date
 }
 
+interface Label {
+    id: string,
+    name: string,
+    color: string,
+}
+
 interface IssueProps {
+    key: string,
     issue: Issue
 }
 

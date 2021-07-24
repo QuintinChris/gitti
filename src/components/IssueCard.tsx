@@ -12,7 +12,7 @@ class IssueCard extends React.Component<IssueProps> {
                 <Card.Body>
                     <Card.Header>
                         <Card.Title>{this.props.issue.name}</Card.Title>
-                        <Card.Text>Last Updated: {this.props.issue.lastUpdated.toDateString}</Card.Text>
+                        <Card.Text>Last Updated: {this.props.issue.lastUpdated.toDateString()}</Card.Text>
                     </Card.Header>
                     <Card.Body>
                         <Card.Text className="PaddedTicketDesc">{this.props.issue.description}</Card.Text>
@@ -23,7 +23,7 @@ class IssueCard extends React.Component<IssueProps> {
                         {
                             this.props.issue.labels ?
                                 this.props.issue.labels.map((label: any) => {
-                                    return <Badge pill variant="info">{label.name}</Badge>;
+                                    return <Badge key={label.id} pill variant="info">{label.name}</Badge>;
                                 }) : ''
                         }
                         </Card.Text>
