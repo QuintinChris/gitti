@@ -40,6 +40,10 @@ interface ApiClient {
     getExcludedItems(items: string[]): string
 }
 
+interface EmailService {
+    sendMail(to: string, subject: string, content: string) : Promise<void>
+}
+
 type DefaultLabels =
     'good first issue' |
     'help wanted' |
@@ -62,4 +66,4 @@ type Query = {
     excludedItems?: string
 }
 
-export type {Issue, IssueProps, AppState, AppProps, DefaultLabels, KeywordLocation, Query}
+export type {Issue, IssueProps, AppState, AppProps, DefaultLabels, KeywordLocation, Query, EmailService}

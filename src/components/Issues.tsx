@@ -6,6 +6,7 @@ import IssueCard from './IssueCard'
 import { Issue, AppState, DefaultLabels, Query } from '../data/Interfaces'
 import ApiClient from '../api/ApiClient'
 import _ from "lodash";
+import EmailService from '../utils/EmailService';
 
 class Issues extends React.Component {
     state: AppState = {
@@ -43,6 +44,11 @@ class Issues extends React.Component {
 
     componentDidMount = () => {
         this.GetIssues();
+        var emailService: EmailService = new EmailService()
+        emailService.sendMail('cwq23drexel@gmail.com', 'New Issues From GitHub', this.state.issues.toString())
+            .then((msg: any) => {
+                console.log(`SendMail Result: ${msg}`)
+            })
     }
 
     render() {
